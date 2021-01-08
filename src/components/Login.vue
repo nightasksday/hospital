@@ -43,7 +43,7 @@ export default {
       },
       loading: false,
       staff:{
-        job:0,
+        job:3,
         id:1
       }
     }

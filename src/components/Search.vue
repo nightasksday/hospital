@@ -112,15 +112,16 @@
             <el-table-column prop="nurseID" label="病房护士ID" v-if="this.currentJob !== 1" column-key="nurseID" width="100"></el-table-column>
             <el-table-column prop="grade" label="病情评级" column-key="grade" width="100"
                              :filters="[{text: '轻症', value: '轻症'}, {text: '重症', value: '重症'}, {text: '危重症', value: '危重症'}]" :filter-method="filterHandler"></el-table-column>
-            <el-table-column prop="wait" label="待转移" column-key="wait" width="80"
+            <el-table-column prop="waitTransfer" label="待转移" column-key="waitTransfer" width="80"
                              :filters="[{text: '是', value: '是'}, {text: '否', value: '否'}]" :filter-method="filterHandler"></el-table-column>
-            <el-table-column prop="leave" label="可出院" column-key="leave" width="80"
+            <el-table-column prop="leaveHospital" label="可出院" column-key="leaveHospital" width="80"
                              :filters="[{text: '是', value: '是'}, {text: '否', value: '否'}]" :filter-method="filterHandler"></el-table-column>
             <el-table-column prop="lifeCondition" label="生命状态" column-key="lifeCondition"
                              :filters="[{text: '出院', value: '出院'}, {text: '治疗', value: '治疗'}, {text: '死亡', value: '死亡'}]" :filter-method="filterHandler"></el-table-column>
-            <el-table-column prop="modify" label="操作" column-key="modify" width="80"  v-if="currentJob===0||currentJob===3">
+            <el-table-column prop="modify" label="操作" column-key="modify" width="80"  v-if="this.currentJob===0||this.currentJob===3">
               <template slot-scope="scope">
-                <el-button @click="handleModify(scope.$index)" type="text">登记</el-button>
+                <el-button @click="handleModify(scope.$index)" v-if="canRegister(scope.$index)" type="text">登记</el-button>
+                <el-button @click="leaveHospital(scope.$index)" v-if="canLeave(scope.$index)" type="text">出院</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -157,44 +158,10 @@
 <script>
     export default {
       name: "Search",
-      created() {
-        //主治医生登陆时，查看有无可出院的病人
-        if (this.currentJob === 0) {
-          this.$axios.post('/searchSatisfiedPatient', {
-            staffId: this.currentId,
-          })
-            .then(resp => {
-              console.log(resp);
-              if (resp.data.patients.length === 0) {
-                this.$message.error("您管辖的区域暂无可出院病人");
-                return
-              }
-              this.satisfiedPatientResult = [];
-              for (var i = 0; i < resp.data.patients.length; i++) {
-                if (resp.data.patients[i].gender === 0) {
-                  resp.data.patients[i].gender = '男'
-                } else {
-                  resp.data.patients[i].gender = '女'
-                }
-                this.satisfiedPatientResult.push(
-                  {
-                    patientId: resp.data.patients[i].patientID,
-                    name: resp.data.patients[i].name,
-                    age: resp.data.patients[i].age,
-                    gender: resp.data.patients[i].gender,
-                  }
-                )
-              }
-              this.$message.warning("有可出院病人，请尽快操作")
-            })
-            .catch(error => {
-              this.$message.error("查询失败，请重试");
-              console.log(error)
-            })
-        }
-      },
       data() {
         return {
+          currentJob: this.$store.state.currentJob,
+          currentId: this.$store.state.currentId,
           tableDisplayed:0,
           searchID:'',
           bedTableData:[{
@@ -243,8 +210,8 @@
             treatArea: '轻症',
             nurseID: 1,
             grade: '轻症',
-            wait:'是',
-            leave: '是',
+            waitTransfer:'是',
+            leaveHospital: '是',
             lifeCondition: '出院'
           }, {
             id: '1',
@@ -254,8 +221,8 @@
             treatArea: '轻症',
             nurseID: 1,
             grade: '重症',
-            wait:'是',
-            leave: '否',
+            waitTransfer:'是',
+            leaveHospital: '否',
             lifeCondition: '出院'
           }, {
             id: '2',
@@ -265,8 +232,8 @@
             treatArea: '轻症',
             nurseID: 1,
             grade: '轻症',
-            wait:'是',
-            leave: '是',
+            waitTransfer:'是',
+            leaveHospital: '是',
             lifeCondition: '出院'
           }, {
             id: '3',
@@ -276,13 +243,10 @@
             treatArea: '隔离区',
             nurseID: 1,
             grade: '轻症',
-            wait:'否',
-            leave: '是',
+            waitTransfer:'否',
+            leaveHospital: '是',
             lifeCondition: '治疗'
           }],
-          currentJob: this.$store.state.currentJob,
-          currentId: this.$store.state.currentId,
-
           treatAreaOption: [
             {
               value: 1,
@@ -302,106 +266,25 @@
             }
           ],
 
-          roomNurseIdForSearchPatient: '',
-
-          patientByRoomNurseIdResult: [
-            // {
-            //   patientId: 1,
-            //   name: "哈哈",
-            //   age: 7,
-            //   gender: "男"
-            // }
-          ],
-
           searchPatientStateForm: {
             patientId: null,
             sickLevel: null,
             liveState: null,
           },
 
-          patientByStateResult: [
-            // {
-            //   patientId: 9,
-            //   name: "666",
-            //   age: 8,
-            //   gender: "男"
-            // }
-          ],
-
-          satisfiedPatientResult: [
-            // {
-            //   patientId: 16,
-            //   name: 'hhh',
-            //   age: 78,
-            //   gender: '女',
-            // }
-          ],
-
-          specialPatientResult: [
-            // {
-            //   patientId: 16,
-            //   name: 'hhh',
-            //   age: 78,
-            //   gender: '女',
-            //   sickLevel: 3,
-            // }
-          ],
-
-          nurseLeaderResult: [
-            {
-              id: 5,
-              name: '杨宇晗',
-              gender: '男',
-              age: 10
-            },
-          ],
-
-          roomNurseResult: [
-            // {
-            //   id: 6,
-            //   name: '刘俊伟',
-            //   gender: '男',
-            //   age: 10,
-            // },
-            // {
-            //   id: 7,
-            //   name: '刘伟',
-            //   gender: '男',
-            //   age: 19,
-            // },
-          ],
-
-          sickBedsResult: [
-            // {
-            //   sickBedId: 9,
-            //   sickRoomId: 5,
-            //   patientId: 4
-            // },
-            // {
-            //   sickBedId: 19,
-            //   sickRoomId: 15,
-            //   patientId: -1
-            // }
-          ],
-
-          emergencyNurseSearchForm: {
-            treatArea: null
-          },
-
-          emergencyNurseSearchResult: [
-            // {
-            //   patientId: 9,
-            //   name: "哈哈哈",
-            //   age: 78,
-            //   gender: "男"
-            // }
-          ],
-
         }
       },
       methods: {
         handleDelete(index) {
           alert(this.staffTableData[index].id)
+        },
+
+        canRegister(index) {
+          return this.patientTableData[index].leaveHospital === "否"
+        },
+
+        canLeave(index) {
+          return this.patientTableData[index].leaveHospital === "是" && this.currentJob === 0 && this.patientTableData[index].treatArea === "轻症"
         },
 
         handleModify(index) {
@@ -416,31 +299,50 @@
 
         searchPatient() {
           this.tableDisplayed = 2;
-          this.$axios.post('/searchNurseLeader', {
-            staffId: this.currentId
-          })
-            .then(resp => {
-              console.log(resp);
-              this.nurseLeaderResult = [];
-              if (resp.data.nurseLeader.gender === 0) {
-                resp.data.nurseLeader.gender = '男'
-              } else {
-                resp.data.nurseLeader.gender = '女'
-              }
-              this.nurseLeaderResult.push(
-                {
-                  id: resp.data.nurseLeader.id,
-                  name: resp.data.nurseLeader.name,
-                  gender: resp.data.nurseLeader.gender,
-                  age: resp.data.nurseLeader.age
+          if (this.currentJob === 0||this.currentJob === 2) {
+            this.$axios.post('/searchAreaPatient', {
+              staffId: this.currentId
+            })
+              .then(resp => {
+                console.log(resp);
+                this.patientTableData = [];
+                let patient = resp.data.patient;
+                for (var i = 0; i < patient.length; i++) {
+                  if (patient[i].gender === 0) {
+                    patient[i].gender = '男'
+                  } else {
+                    patient[i].gender = '女'
+                  }
+                  if (patient[i].treatArea === 0) {
+                    patient[i].treatArea = '隔离区'
+                  } else if (patient[i].treatArea === 1) {
+                    patient[i].treatArea = '轻症'
+                  } else if (patient[i].treatArea === 2) {
+                    patient[i].treatArea = '重症'
+                  }
+                  this.patientTableData.push(
+                    {
+                      id: patient[i].id,
+                      name: patient[i].name,
+                      gender: patient[i].gender,
+                      age: patient[i].age,
+                      treatArea: patient[i].treatArea,
+                      nurseID: patient[i].nurseID,
+                      grade: patient[i].grade,
+                      waitTransfer:patient[i].waitTransfer,
+                      leaveHospital: patient[i].leaveHospital,
+                      lifeCondition: patient[i].lifeCondition
+                    }
+                  );
                 }
-              );
-              this.$message.success("查询成功")
-            })
-            .catch(error => {
-              this.$message.error("查询失败，请重试");
-              console.log(error)
-            })
+                this.$message.success("查询成功")
+              })
+              .catch(error => {
+                this.$message.error("查询失败，请重试");
+                console.log(error)
+              })
+          }
+
         },
         searchNurseLeader() {
           this.tableDisplayed = 1;
@@ -572,41 +474,7 @@
             })
         },
 
-        searchSatisfiedPatient() {
-          this.$axios.post('/searchSatisfiedPatient', {
-            staffId: this.currentId,
-          })
-            .then(resp => {
-              console.log(resp);
-              if (resp.data.patients.length === 0) {
-                this.$message.error("您管辖的区域暂无可出院病人");
-                return
-              }
-              this.satisfiedPatientResult = [];
-              for (var i = 0; i < resp.data.patients.length; i++) {
-                if (resp.data.patients[i].gender === 0) {
-                  resp.data.patients[i].gender = '男'
-                } else {
-                  resp.data.patients[i].gender = '女'
-                }
-                this.satisfiedPatientResult.push(
-                  {
-                    patientId: resp.data.patients[i].patientID,
-                    name: resp.data.patients[i].name,
-                    age: resp.data.patients[i].age,
-                    gender: resp.data.patients[i].gender,
-                  }
-                )
-              }
-              this.$message.success("查询成功")
-            })
-            .catch(error => {
-              this.$message.error("查询失败，请重试");
-              console.log(error)
-            })
-        },
-
-        deleteSatisfiedPatient(para) {
+        leaveHospital(index) {
           this.$axios.post('/deleteSatisfiedPatient', {
             patientId: para,
           })
@@ -637,112 +505,6 @@
             })
             .catch(error => {
               this.$message.error("出院失败，请重试");
-              console.log(error)
-            })
-        },
-
-        searchSpecialPatient() {
-          this.$axios.post('/searchSpecialPatient', {
-            staffId: this.currentId,
-          })
-            .then(resp => {
-              console.log(resp);
-              if (resp.data.patients.length === 0) {
-                this.$message.error("暂无待转入其他区域的病人");
-                return
-              }
-              this.specialPatientResult = [];
-              for (var i = 0; i < resp.data.patients.length; i++) {
-                if (resp.data.patients[i].gender === 0) {
-                  resp.data.patients[i].gender = '男'
-                } else {
-                  resp.data.patients[i].gender = '女'
-                }
-                switch (resp.data.patients[i].sickLevel) {
-                  case 1 : {
-                    resp.data.patients[i].sickLevel = '轻症';
-                    break
-                  }
-                  case 2 : {
-                    resp.data.patients[i].sickLevel = '重症';
-                    break
-                  }
-                  case 3 : {
-                    resp.data.patients[i].sickLevel = '危重症';
-                    break
-                  }
-                }
-                this.specialPatientResult.push(
-                  {
-                    patientId: resp.data.patients[i].patientID,
-                    name: resp.data.patients[i].name,
-                    age: resp.data.patients[i].age,
-                    gender: resp.data.patients[i].gender,
-                    sickLevel: resp.data.patients[i].sickLevel,
-                  },
-                )
-              }
-              this.$message.success("查询成功")
-            })
-            .catch(error => {
-              this.$message.error("查询失败，请重试");
-              console.log(error)
-            })
-        },
-
-        transformPatient(id) {
-          this.$axios.post('/transformPatient', {
-            patientId: id,
-          })
-            .then(resp => {
-              if (resp.data.status === 1) {
-                this.$axios.post('/searchSpecialPatient', {
-                  staffId: this.currentId,
-                })
-                  .then(resp => {
-                    console.log(resp);
-                    this.specialPatientResult = [];
-                    for (var i = 0; i < resp.data.patients.length; i++) {
-                      if (resp.data.patients[i].gender === 0) {
-                        resp.data.patients[i].gender = '男'
-                      } else {
-                        resp.data.patients[i].gender = '女'
-                      }
-                      switch (resp.data.patients[i].sickLevel) {
-                        case 1 : {
-                          resp.data.patients[i].sickLevel = '轻症';
-                          break
-                        }
-                        case 2 : {
-                          resp.data.patients[i].sickLevel = '重症';
-                          break
-                        }
-                        case 3 : {
-                          resp.data.patients[i].sickLevel = '危重症';
-                          break
-                        }
-                      }
-                      this.specialPatientResult.push(
-                        {
-                          patientId: resp.data.patients[i].patientID,
-                          name: resp.data.patients[i].name,
-                          age: resp.data.patients[i].age,
-                          gender: resp.data.patients[i].gender,
-                          sickLevel: resp.data.patients[i].sickLevel,
-                        },
-                      )
-                    }
-                  })
-                  .catch(error => {
-                    console.log(error)
-                  });
-                this.$message.success("转出成功")
-              } else {
-                this.$message.error("目标治疗区域无法移入新病人")
-              }
-            })
-            .catch(error => {
-              this.$message.error("出错了，请重试");
               console.log(error)
             })
         },
@@ -794,92 +556,7 @@
 
         },
 
-        jumpToModifyPatient(para) {
-          this.$store.commit('setModifyPatientId', para);
-          this.$router.replace({path: '/ModifyPatient'})
-        },
-
-        searchPatientByState() {
-          if (this.searchPatientStateForm.sickLevel === null &&
-            this.searchPatientStateForm.liveState === null) {
-            this.$message.error("至少选择一项");
-            return
-          }
-          this.$axios.post('/searchPatientByState', {
-            staffId: this.currentId,
-            sickLevel: this.searchPatientStateForm.sickLevel,
-            liveState: this.searchPatientStateForm.liveState,
-          })
-            .then(resp => {
-              console.log(resp)
-              this.patientByStateResult = [];
-              if (resp.data.patients.length === 0) {
-                this.$message.error('无这样的病人或您没有全选管辖这个病人')
-                return
-              }
-              for (var i = 0; i < resp.data.patients.length; i++) {
-                if (resp.data.patients[i].gender === 0) {
-                  resp.data.patients[i].gender = '男'
-                } else {
-                  resp.data.patients[i].gender = '女'
-                }
-                this.patientByStateResult.push(
-                  {
-                    patientId: resp.data.patients[i].patientID,
-                    name: resp.data.patients[i].name,
-                    age: resp.data.patients[i].age,
-                    gender: resp.data.patients[i].gender,
-                  }
-                )
-              }
-              this.$message.success("查询成功")
-            })
-            .catch(error => {
-              console.log(error)
-              this.$message.error('查询错误，请重试')
-            })
-        },
-
-        emergencyNurseSearch() {
-          if (this.emergencyNurseSearchForm.treatArea === null) {
-            this.$message.error("请选择治疗区域");
-            return
-          }
-          this.$axios.post('/emergencyNurseSearch', {
-            treatArea: this.emergencyNurseSearchForm.treatArea
-          })
-            .then(resp => {
-              console.log(resp);
-              this.emergencyNurseSearchResult = [];
-              if (resp.data.patients.length === 0) {
-                this.$message.error('无这样的病人');
-                return
-              }
-              for (var i = 0; i < resp.data.patients.length; i++) {
-                if (resp.data.patients[i].gender === 0) {
-                  resp.data.patients[i].gender = '男'
-                } else {
-                  resp.data.patients[i].gender = '女'
-                }
-                this.emergencyNurseSearchResult.push(
-                  {
-                    patientId: resp.data.patients[i].patientID,
-                    name: resp.data.patients[i].name,
-                    age: resp.data.patients[i].age,
-                    gender: resp.data.patients[i].gender,
-                  }
-                )
-              }
-              this.$message.success("查询成功")
-            })
-            .catch(error => {
-              console.log(error);
-              this.$message.error('查询错误，请重试')
-            })
-        }
       }
-
-
     }
 </script>
 

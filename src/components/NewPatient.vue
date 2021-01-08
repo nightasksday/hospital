@@ -173,7 +173,7 @@
           this.patientForm.testResult = "";
         },
         submit() {
-          console.log(this.patientForm)
+          console.log(this.patientForm);
           if (this.patientForm.name === '' ||
             this.patientForm.age === '' ||
             this.patientForm.gender === '' ||
@@ -183,7 +183,7 @@
             this.patientForm.testDate === '' ||
             this.patientForm.testResult === ''
           ) {
-            this.$message.error("任何一项不得为空")
+            this.$message.error("任何一项不得为空");
             return
           }
           this.$axios.post('/addNewPatient', {

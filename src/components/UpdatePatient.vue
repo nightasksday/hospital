@@ -325,4 +325,11 @@
     padding-left: 10px!important;
     padding-right: 10px!important;
   }
+  .el-textarea__inner {
+    padding-left: 10px!important;
+    padding-right: 10px!important;
+    border-radius: 2px;
+    letter-spacing: 0;
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  }
 </style>
