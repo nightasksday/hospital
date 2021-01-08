@@ -63,7 +63,7 @@ export default {
           if (resp.data.staff === null){
             throw error()
           }
-          console.log(resp)
+          console.log(resp);
           if (resp.status === 200) {
             this.$message({
               message: '登陆成功',
@@ -75,8 +75,8 @@ export default {
         })
         .catch(error =>
           this.$message.error('ID不存在')
-          
-    )
+   )
+
 
     }
   }

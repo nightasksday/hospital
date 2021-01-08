@@ -75,6 +75,17 @@
         }
       },
       methods: {
+        created(){
+          this.$axios.post('/originStaff', {
+          })
+            .then(resp => {
+              this.staffForm.name = resp.data.staffForm.name;
+              this.staffForm.gender = resp.data.staffForm.gender;
+              this.staffForm.age = resp.data.staffForm.age;
+            }).catch(error => {
+            this.$message.error('加载错误')
+          })
+        },
         submit() {
           if (this.staffForm.name === '' ||
             this.staffForm.age === '' ||
