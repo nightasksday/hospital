@@ -18,22 +18,22 @@ export default new Vuex.Store({
       state.currentId = data.id;
     },
 
-    // logout(state){
-    //   localStorage.removeItem('currentJob');
-    //   localStorage.removeItem('currentId');
-    //   state.currentJob = null;
-    //   state.currentId = null;
-    // },
+    logout(state){
+      localStorage.removeItem('currentJob');
+      localStorage.removeItem('currentId');
+      state.currentJob = null;
+      state.currentId = null;
+    },
     //
     // setModifyTarget(state, data){
     //   localStorage.setItem('modifyStaffId', data)
     //   state.modifyStaffId = data;
     // },
     //
-    // setModifyPatientId(state, data){
-    //   localStorage.setItem('modifyPatientId', data)
-    //   state.modifyPatientId = data;
-    // },
+    setModifyPatientId(state, data){
+      localStorage.setItem('modifyPatientId', data)
+      state.modifyPatientId = data;
+    },
 
   },
   actions: {}

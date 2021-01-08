@@ -48,7 +48,7 @@
             </el-form-item>
 
             <el-form-item label="病情评级" prop="sickLevel" class="form-label" style="text-align: left">
-              <el-select v-model="patientForm.sickLevel" placeholder="请选择病情评级" style="width: 330px">
+              <el-select v-model="patientForm.grade" placeholder="请选择病情评级" style="width: 330px">
                 <el-option
                   v-for="item in sickLevelOption"
                   :key="item.value"
@@ -109,7 +109,7 @@
             gender: '',
             arriveDate: '',
             temperature: '',
-            sickLevel: '',
+            grade: '',
             testDate: '',
             testResult: '',
           },
@@ -153,7 +153,7 @@
             age: [{required: true, message: '年龄不得为空', trigger: 'blur'}],
             arriveDate: [{required: true, message: '入院日期不得为空', trigger: 'blur'}],
             temperature: [{required: true, message: '体温不得为空', trigger: 'blur'}],
-            sickLevel: [{required: true, message: '病情评级不得为空', trigger: 'blur'}],
+            grade: [{required: true, message: '病情评级不得为空', trigger: 'blur'}],
             testDate: [{required: true, message: '检测日期不得为空', trigger: 'blur'}],
             testResult: [{required: true, message: '检测结果不得为空', trigger: 'blur'}],
           },
@@ -168,7 +168,7 @@
           this.patientForm.gender = '';
           this.patientForm.arriveDate = '';
           this.patientForm.temperature = '';
-          this.patientForm.sickLevel = '';
+          this.patientForm.grade = '';
           this.patientForm.testDate = "";
           this.patientForm.testResult = "";
         },
@@ -179,7 +179,7 @@
             this.patientForm.gender === '' ||
             this.patientForm.arriveDate === '' ||
             this.patientForm.temperature === '' ||
-            this.patientForm.sickLevel === '' ||
+            this.patientForm.grade === '' ||
             this.patientForm.testDate === '' ||
             this.patientForm.testResult === ''
           ) {
@@ -193,7 +193,7 @@
 
             arriveDate: this.patientForm.arriveDate,
             temperature: this.patientForm.temperature,
-            sickLevel: this.patientForm.sickLevel,
+            grade: this.patientForm.grade,
 
             testDate: this.patientForm.testDate,
             testResult: this.patientForm.testResult,

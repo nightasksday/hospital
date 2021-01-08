@@ -120,8 +120,8 @@
                              :filters="[{text: '出院', value: '出院'}, {text: '治疗', value: '治疗'}, {text: '死亡', value: '死亡'}]" :filter-method="filterHandler"></el-table-column>
             <el-table-column prop="modify" label="操作" column-key="modify" width="80"  v-if="this.currentJob===0||this.currentJob===3">
               <template slot-scope="scope">
-                <el-button @click="handleModify(scope.$index)" v-if="canRegister(scope.$index)" type="text">登记</el-button>
-                <el-button @click="leaveHospital(scope.$index)" v-if="canLeave(scope.$index)" type="text">出院</el-button>
+                <el-button @click="handleModify(scope.$index)" v-if="canRegister(scope.$index)" style="padding: 0" type="text">登记</el-button>
+                <el-button @click="leaveHospital(scope.$index)" v-if="canLeave(scope.$index)" style="padding: 0" type="text">出院</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -158,6 +158,28 @@
 <script>
     export default {
       name: "Search",
+      created() {
+        //主治医生登陆时，查看有无可出院的病人
+        if (this.currentJob === 0) {
+          this.$axios.post('/searchSatisfiedPatient', {
+            staffId: this.currentId,
+          })
+            .then(resp => {
+              console.log(resp);
+              if (resp.data.patient.length === 0) {
+                this.$message.error("您管辖的区域暂无可出院病人");
+                return
+              }
+              let patient = resp.data.patient;
+              this.proceedPatient(patient);
+              this.$message.warning("有可出院病人，请尽快操作")
+            })
+            .catch(error => {
+              this.$message.error("查询失败，请重试");
+              console.log(error)
+            })
+        }
+      },
       data() {
         return {
           currentJob: this.$store.state.currentJob,
@@ -245,7 +267,7 @@
             nurseID: 1,
             grade: '轻症',
             waitTransfer:'否',
-            leaveHospital: '是',
+            leaveHospital: '否',
             lifeCondition: '治疗'
           }]
 
@@ -257,7 +279,7 @@
         },
 
         canRegister(index) {
-          return this.patientTableData[index].leaveHospital === "否"
+          return this.patientTableData[index].leaveHospital === "否" && this.patientTableData[index].lifeCondition === "治疗"
         },
 
         canLeave(index) {
@@ -330,7 +352,6 @@
           }
         );
       }
-      this.$message.success("查询成功")
     },
 
         searchPatient() {
@@ -475,13 +496,18 @@
           })
             .then(resp => {
               console.log(resp);
-              this.sickBedsResult = [];
+              this.bedTableData = [];
               for (var i = 0; i < resp.data.sickBeds.length; i++) {
-                this.sickBedsResult.push(
+                if (resp.data.sickBeds[i].state === -1) {
+                  resp.data.sickBeds[i].state  = '空闲'
+                } else {
+                  resp.data.sickBeds[i].state  = resp.data.sickBeds[i].state + '号病人使用'
+                }
+                this.bedTableData.push(
                   {
                     sickBedId: resp.data.sickBeds[i].id,
-                    sickRoomId: resp.data.sickBeds[i].sickRoomID,
-                    patientId: resp.data.sickBeds[i].patientId
+                    sickRoomId: resp.data.sickBeds[i].roomID,
+                    state: resp.data.sickBeds[i].state
                   }
                 )
               }
