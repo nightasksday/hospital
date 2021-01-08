@@ -77,6 +77,7 @@
       methods: {
         created(){
           this.$axios.post('/originStaff', {
+            staffID: this.targetId
           })
             .then(resp => {
               this.staffForm.name = resp.data.staffForm.name;
