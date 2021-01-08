@@ -12,7 +12,7 @@
               <el-form label-position="top" size=mini ref="applyForm"
                        label-width="150px" class="demo-ruleForm" style="margin:9px 0 auto;width: 330px;">
 
-                <el-form-item label="生命状态" prop="sickLevel" class="form-label" style="text-align: left">
+                <el-form-item label="生命状态" prop="liveState" class="form-label" style="text-align: left">
                   <el-select v-model="newLiveState" placeholder="请选择生命状态" style="width: 330px">
                     <el-option
                       v-for="item in liveStateOption"
@@ -32,7 +32,34 @@
 
               </el-form>
             </div>
+            <div v-if="newLiveState === 1">
+              <div style="font-size: 20px">修改病情评级</div>
+              <el-form label-position="top" size=mini ref="applyForm"
+                       label-width="150px" class="demo-ruleForm" style="margin:9px 0 auto;width: 330px;">
+
+                <el-form-item label="病情评级" prop="sickLevel" class="form-label" style="text-align: left">
+                  <el-select v-model="newGrade" placeholder="请选择病情评级" style="width: 330px">
+                    <el-option
+                      v-for="item in sickLevelOption"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+
+                <el-form-item>
+                  <el-button type="primary" v-on:click="submitNewSickLevel"
+                             style="background-color: #356eff;border-color: #356eff;width: 100px;height: 30px;margin-top: -10px;float: right">
+                    提交
+                  </el-button>
+                </el-form-item>
+
+              </el-form>
+            </div>
+
           </div>
+
             <div v-if="currentJob === 3">
               <div style="font-size: 20px">登记病人每日信息</div>
               <el-form :model="dailyInformation" label-position="top" size=mini ref="applyForm"
@@ -114,9 +141,9 @@
                 </el-form-item>
               </el-form>
             </div>
-
+      </div>
           </div>
-        </div>
+
     </el-main>
   </el-container>
 </template>
@@ -165,7 +192,7 @@
             },
           ],
 
-          newSickLevel: '',
+          newGrade: '',
           newLiveState: 1,
           dailyInformation: {
             temperature: '',
@@ -183,8 +210,25 @@
         }
       },
       methods: {
+        submitNewSickLevel() {
+          if (this.newGrade === '') {
+            this.$message.error("请选择病情评级");
+            return
+          }
+          this.$axios.post('/modifyGrade', {
+            patientId: this.patientId,
+            newGrade: this.newGrade
+          })
+            .then(resp => {
+              if (resp.status === 200) {
+                this.$message.success("修改成功");
+                this.newGrade = ''
+              } else {
+                this.$message.success("修改错误，请重试")
+              }
+            })
+        },
         submitNewLiveState() {
-          alert(this.newLiveState);
           if (this.newLiveState === '') {
             this.$message.error("请选择生命状态");
             return

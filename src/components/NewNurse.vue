@@ -12,7 +12,7 @@
 
             <el-form-item label="姓名" prop="name" class="form-label" style="text-align: left">
               <el-input type="text" v-model="roomNurseForm.name" autocomplete="off"
-                        placeholder="请输入病人姓名"></el-input>
+                        placeholder="请输入护士姓名"></el-input>
             </el-form-item>
 
             <el-form-item prop="gender" class="form-label" label="性别" label-width="80px">
@@ -54,7 +54,6 @@
         name: "NewNurse",
       created() {
         this.currentId = this.$store.state.currentId;
-        // alert(this.currentId)
       },
       data() {
         return {

@@ -137,7 +137,7 @@
             <el-table-column prop="age" label="年龄" column-key="age" width="80"></el-table-column>
             <el-table-column prop="delete" label="操作" column-key="delete" width="80" v-if="currentJob===2">
               <template slot-scope="scope">
-                <el-button @click="handleDelete(scope.$index)" type="text" size="small">删除</el-button></template>
+                <el-button @click="deleteRoomNurse(scope.$index)" type="text" size="small">删除</el-button></template>
               </el-table-column>
           </el-table>
         </div>
@@ -481,7 +481,6 @@
                   },
                 )
               }
-              this.$message.success("查询成功")
             })
             .catch(error => {
               this.$message.error("查询失败，请重试");
@@ -524,36 +523,14 @@
           this.$router.replace({path: '/ModifyStaff'})
         },
 
-        deleteRoomNurse(para) {
+        deleteRoomNurse(index) {
           this.$axios.post('/deleteRoomNurse', {
-            staffId: para
+            staffId: this.staffTableData[index].id
           })
             .then(resp => {
               console.log(resp);
               if (resp.data.status === 1) {
-                this.$axios.post('/searchRoomNurse', {
-                  staffId: this.currentId
-                })
-                  .then(resp => {
-                    console.log(resp);
-                    this.roomNurseResult = [];
-                    for (var i = 0; i < resp.data.roomNurses.length; i++) {
-                      if (resp.data.roomNurses[i].gender === 0) {
-                        resp.data.roomNurses[i].gender = '男'
-                      } else {
-                        resp.data.roomNurses[i].gender = '女'
-                      }
-                      this.roomNurseResult.push(
-                        {
-                          id: resp.data.roomNurses[i].id,
-                          name: resp.data.roomNurses[i].name,
-                          gender: resp.data.roomNurses[i].gender,
-                          age: resp.data.roomNurses[i].age
-                        },
-                      )
-                    }
-                  });
-                this.$message.success("删除成功")
+                this.searchRoomNurse();
               } else {
                 this.$message.error("删除失败，此护士正在工作")
               }
@@ -564,45 +541,19 @@
             })
         },
 
-
-
         leaveHospital(index) {
           this.$axios.post('/deleteSatisfiedPatient', {
-            patientId: para,
+            patientId: this.patientTableData[index].id,
           })
             .then(resp => {
-              this.$axios.post('/searchSatisfiedPatient', {
-                staffId: this.currentId,
-              })
-                .then(resp => {
-                  console.log(resp);
-                  this.satisfiedPatientResult = [];
-                  for (var i = 0; i < resp.data.patients.length; i++) {
-                    if (resp.data.patients[i].gender === 0) {
-                      resp.data.patients[i].gender = '男'
-                    } else {
-                      resp.data.patients[i].gender = '女'
-                    }
-                    this.satisfiedPatientResult.push(
-                      {
-                        patientId: resp.data.patients[i].patientId,
-                        name: resp.data.patients[i].name,
-                        age: resp.data.patients[i].age,
-                        gender: resp.data.patients[i].gender,
-                      }
-                    )
-                  }
-                });
-              this.$message.success("出院成功")
+              this.searchPatient();
             })
             .catch(error => {
               this.$message.error("出院失败，请重试");
               console.log(error)
             })
         },
-
-
-
+        
       }
     }
 </script>

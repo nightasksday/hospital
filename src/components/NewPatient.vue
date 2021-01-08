@@ -46,8 +46,8 @@
               <el-input type="text" v-model="patientForm.temperature" autocomplete="off"
                         placeholder="请输入病人体温"></el-input>
             </el-form-item>
-
-            <el-form-item label="病情评级" prop="sickLevel" class="form-label" style="text-align: left">
+            <div style="margin-bottom: 10px">第一次核酸检测信息</div>
+            <el-form-item label="病情评级" prop="grade" class="form-label" style="text-align: left">
               <el-select v-model="patientForm.grade" placeholder="请选择病情评级" style="width: 330px">
                 <el-option
                   v-for="item in sickLevelOption"
@@ -58,7 +58,7 @@
               </el-select>
             </el-form-item>
 
-            <div style="margin-bottom: 10px">第一次核酸检测信息</div>
+
 
             <el-form-item label="检测日期" prop="testDate" class="form-label" style="text-align: left">
               <el-date-picker type="date" v-model="patientForm.testDate" value-format="yyyy-MM-dd"
@@ -193,13 +193,13 @@
 
             arriveDate: this.patientForm.arriveDate,
             temperature: this.patientForm.temperature,
-            grade: this.patientForm.grade,
 
+            grade: this.patientForm.grade,
             testDate: this.patientForm.testDate,
             testResult: this.patientForm.testResult,
           })
             .then(resp => {
-              this.$message.success("提交成功")
+              this.$message.success("提交成功");
               this.clear()
             })
             .catch(error => {
