@@ -529,7 +529,7 @@
           })
             .then(resp => {
               console.log(resp);
-              if (resp.data.status === 1) {
+              if (resp.data.status === 0) {
                 this.searchRoomNurse();
               } else {
                 this.$message.error("删除失败，此护士正在工作")
@@ -553,7 +553,7 @@
               console.log(error)
             })
         },
-        
+
       }
     }
 </script>
