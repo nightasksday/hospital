@@ -269,7 +269,7 @@
             this.dailyInformation.symptom === '' ||
             this.dailyInformation.liveState === '' ||
             this.dailyInformation.sickLevel === '') {
-            this.$message.error("任何一项不得为空")
+            this.$message.error("任何一项不得为空");
             return
           }
           this.$axios.post('/submitDailyInformation', {
@@ -281,10 +281,10 @@
           })
             .then(resp => {
               if (resp.data.status === 1) {
-                this.$message.success("提交成功")
-                this.dailyInformation.temperature = ''
-                this.dailyInformation.symptom = ''
-                this.dailyInformation.liveState = ''
+                this.$message.success("提交成功");
+                this.dailyInformation.temperature = '';
+                this.dailyInformation.symptom = '';
+                this.dailyInformation.liveState = '';
                 this.dailyInformation.sickLevel = ''
               } else {
                 this.$message.error("今日已提交，无法重复提交")
@@ -296,7 +296,7 @@
           if (this.testForm.testDate === '' ||
             this.testForm.testResult === '' ||
             this.testForm.sickLevel === '') {
-            this.$message.error("任何一项不得为空")
+            this.$message.error("任何一项不得为空");
             return
           }
           this.$axios.post('/submitNewTest', {
@@ -307,9 +307,9 @@
           })
             .then(resp => {
               if (resp.data.status === 1) {
-                this.$message.success("提交成功")
-                this.testForm.testDate = ''
-                this.testForm.testResult = ''
+                this.$message.success("提交成功");
+                this.testForm.testDate = '';
+                this.testForm.testResult = '';
                 this.testForm.sickLevel = ''
               } else {
                 this.$message.error("今日已提交，无法重复提交")
