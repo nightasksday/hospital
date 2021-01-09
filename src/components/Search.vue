@@ -289,7 +289,7 @@
         },
 
         canLeave(index) {
-          return this.patientTableData[index].leaveHospital === "是" && this.currentJob === 0 && this.patientTableData[index].treatArea === "轻症区"
+          return this.patientTableData[index].leaveHospital === "是" && this.currentJob === 0 && this.patientTableData[index].treatArea === "轻症区" && this.patientTableData[index].lifeCondition === "治疗"
         },
 
         handleModify(index) {
