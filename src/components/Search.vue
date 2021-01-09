@@ -98,7 +98,7 @@
             </el-collapse>
 
         </div>
-        <div style="margin-top: 0;margin-left: 30px;text-align: left;width: 100%;color: black;" v-if="this.tableDisplayed === 2">
+        <div style="margin-top: 0;margin-left: 30px;text-align: left;width: 100%;color: black;" v-show="tableDisplayed === 2">
           <div class="innerHeader" style="margin-bottom: 0">
           <div class="innerTitle">查询结果</div></div>
 
@@ -127,7 +127,7 @@
           </el-table>
 
         </div>
-        <div style="margin-top: 0;margin-left: 30px;text-align: left;width: 380px;color: black;" v-if="this.tableDisplayed === 1">
+        <div style="margin-top: 0;margin-left: 30px;text-align: left;width: 380px;color: black;" v-show="tableDisplayed === 1">
           <div class="innerHeader" style="margin-bottom: 0">
             <div class="innerTitle">查询结果</div></div>
           <el-table class="table_head table_border" :data="staffTableData">
@@ -141,7 +141,7 @@
               </el-table-column>
           </el-table>
         </div>
-        <div style="margin-top: 0;margin-left: 30px;text-align: left;width: 240px;color: black;" v-if="this.tableDisplayed === 3">
+        <div style="margin-top: 0;margin-left: 30px;text-align: left;width: 240px;color: black;" v-show="tableDisplayed === 3">
           <div class="innerHeader" style="margin-bottom: 0">
             <div class="innerTitle">查询结果</div></div>
           <el-table class="table_head table_border" :data="bedTableData">
