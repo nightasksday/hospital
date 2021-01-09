@@ -362,7 +362,6 @@
           this.tableDisplayed = 2;
 
 
-
           if (this.currentJob === 0||this.currentJob === 2) {
             this.$axios.post('/searchAreaPatient', {
               staffId: this.currentId
@@ -440,13 +439,13 @@
           })
             .then(resp => {
               console.log(resp);
-              this.nurseLeaderResult = [];
+              this.staffTableData = [];
               if (resp.data.nurseLeader.gender === 0) {
                 resp.data.nurseLeader.gender = '男'
               } else {
                 resp.data.nurseLeader.gender = '女'
               }
-              this.nurseLeaderResult.push(
+              this.staffTableData.push(
                 {
                   id: resp.data.nurseLeader.id,
                   name: resp.data.nurseLeader.name,
@@ -469,14 +468,14 @@
           })
             .then(resp => {
               console.log(resp);
-              this.roomNurseResult = [];
+              this.staffTableData = [];
               for (var i = 0; i < resp.data.roomNurses.length; i++) {
                 if (resp.data.roomNurses[i].gender === 0) {
                   resp.data.roomNurses[i].gender = '男'
                 } else {
                   resp.data.roomNurses[i].gender = '女'
                 }
-                this.roomNurseResult.push(
+                this.staffTableData.push(
                   {
                     id: resp.data.roomNurses[i].id,
                     name: resp.data.roomNurses[i].name,
