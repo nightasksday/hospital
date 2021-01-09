@@ -206,7 +206,8 @@
           //   state: '3号病人使用'
           // }
           ],
-          // staffTableData:[{
+          staffTableData:[
+          //   {
           //   id: '0',
           //   name: '王小虎',
           //   gender: '男',
@@ -226,7 +227,8 @@
           //   name: '王小虎',
           //   gender: '男',
           //   age: 8,
-          // }],
+          // }
+          ],
           patientTableData:[
           //   {
           //   id: '0',
