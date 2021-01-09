@@ -118,7 +118,7 @@
                              :filters="[{text: '是', value: '是'}, {text: '否', value: '否'}]" :filter-method="filterHandler"></el-table-column>
             <el-table-column prop="lifeCondition" label="生命状态" column-key="lifeCondition"
                              :filters="[{text: '出院', value: '出院'}, {text: '治疗', value: '治疗'}, {text: '死亡', value: '死亡'}]" :filter-method="filterHandler"></el-table-column>
-            <el-table-column prop="modify" label="操作" column-key="modify" width="80"  v-if="this.currentJob===0||this.currentJob===3">
+            <el-table-column prop="modify" label="操作" column-key="modify" width="60"  v-if="this.currentJob===0||this.currentJob===3">
               <template slot-scope="scope">
                 <el-button @click="handleModify(scope.$index)" v-if="canRegister(scope.$index)" style="padding: 0" type="text">登记</el-button>
                 <el-button @click="leaveHospital(scope.$index)" v-if="canLeave(scope.$index)" style="padding: 0" type="text">出院</el-button>
@@ -289,7 +289,7 @@
         },
 
         canLeave(index) {
-          return this.patientTableData[index].leaveHospital === "是" && this.currentJob === 0 && this.patientTableData[index].treatArea === "轻症"
+          return this.patientTableData[index].leaveHospital === "是" && this.currentJob === 0 && this.patientTableData[index].treatArea === "轻症区"
         },
 
         handleModify(index) {
