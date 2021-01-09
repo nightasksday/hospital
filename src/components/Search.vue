@@ -108,7 +108,7 @@
             <el-table-column prop="gender" label="性别" column-key="gender" width="60"></el-table-column>
             <el-table-column prop="age" label="年龄" column-key="age" width="60"></el-table-column>
             <el-table-column prop="treatArea" label="治疗区域" v-if="this.currentJob === 1" column-key="treatArea"
-                             :filters="[{text: '轻症', value: '轻症'}, {text: '重症', value: '重症'}, {text: '危重症', value: '危重症'}, {text: '隔离区', value: '隔离区'}]" :filter-method="filterHandler"></el-table-column>
+                             :filters="[{text: '轻症区', value: '轻症区'}, {text: '重症区', value: '重症区'}, {text: '危重症区', value: '危重症区'}, {text: '隔离区', value: '隔离区'}]" :filter-method="filterHandler"></el-table-column>
             <el-table-column prop="nurseID" label="病房护士ID" v-if="this.currentJob !== 1" column-key="nurseID" width="100"></el-table-column>
             <el-table-column prop="grade" label="病情评级" column-key="grade" width="100"
                              :filters="[{text: '轻症', value: '轻症'}, {text: '重症', value: '重症'}, {text: '危重症', value: '危重症'}]" :filter-method="filterHandler"></el-table-column>
