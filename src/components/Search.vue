@@ -104,7 +104,7 @@
 
           <el-table class="table_head table_border" :data="patientTableData">
             <el-table-column prop="id" label="ID" column-key="id" width="60" sortable></el-table-column>
-            <el-table-column prop="name" label="姓名" column-key="name" width="80"></el-table-column>
+            <el-table-column prop="name" label="姓名" column-key="name" width="60"></el-table-column>
             <el-table-column prop="gender" label="性别" column-key="gender" width="60"></el-table-column>
             <el-table-column prop="age" label="年龄" column-key="age" width="60"></el-table-column>
             <el-table-column prop="treatArea" label="治疗区域" v-if="this.currentJob === 1" column-key="treatArea"

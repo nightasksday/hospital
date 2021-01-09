@@ -272,7 +272,7 @@
             lifeCondition: this.dailyInformation.lifeCondition,
           })
             .then(resp => {
-              if (resp.data.status === 1) {
+              if (resp.data.status === 0) {
                 this.$message.success("提交成功");
                 this.dailyInformation.currentDate = '';
                 this.dailyInformation.temperature = '';
@@ -298,7 +298,7 @@
             testDate: this.testForm.testDate
           })
             .then(resp => {
-              if (resp.data.status === 1) {
+              if (resp.data.status === 0) {
                 this.$message.success("提交成功");
                 this.testForm.testDate = '';
                 this.testForm.testResult = '';
