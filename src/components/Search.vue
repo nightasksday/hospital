@@ -187,89 +187,93 @@
           tableDisplayed:0,
           searchID:'',
           roomNurseIdForSearchPatient:'',
-            bedTableData:[{
-            id: '0',
-            roomID: '1',
-            state: '空闲'
-          }, {
-            id: '1',
-            roomID: '1',
-            state: '空闲'
-          }, {
-            id: '2',
-            roomID: '1',
-            state: '空闲'
-          }, {
-            id: '3',
-            roomID: '1',
-            state: '3号病人使用'
-          }],
-          staffTableData:[{
-            id: '0',
-            name: '王小虎',
-            gender: '男',
-            age: 8,
-          }, {
-            id: '1',
-            name: '王小虎',
-            gender: '男',
-            age: 8,
-          }, {
-            id: '3',
-            name: '王小虎',
-            gender: '男',
-            age: 8,
-          }, {
-            id: '5',
-            name: '王小虎',
-            gender: '男',
-            age: 8,
-          }],
-          patientTableData:[{
-            id: '0',
-            name: '王小虎',
-            gender: '男',
-            age: 8,
-            treatArea: '轻症区',
-            nurseID: 1,
-            grade: '轻症',
-            waitTransfer:'是',
-            leaveHospital: '是',
-            lifeCondition: '出院'
-          }, {
-            id: '1',
-            name: '王小虎',
-            gender: '男',
-            age: 8,
-            treatArea: '危重症区',
-            nurseID: 1,
-            grade: '重症',
-            waitTransfer:'是',
-            leaveHospital: '否',
-            lifeCondition: '出院'
-          }, {
-            id: '2',
-            name: '王小虎',
-            gender: '男',
-            age: 8,
-            treatArea: '轻症区',
-            nurseID: 1,
-            grade: '轻症',
-            waitTransfer:'是',
-            leaveHospital: '是',
-            lifeCondition: '出院'
-          }, {
-            id: '3',
-            name: '王小虎',
-            gender: '男',
-            age: 8,
-            treatArea: '隔离区',
-            nurseID: 1,
-            grade: '轻症',
-            waitTransfer:'否',
-            leaveHospital: '否',
-            lifeCondition: '治疗'
-          }]
+            bedTableData:[
+          //     {
+          //   id: '0',
+          //   roomID: '1',
+          //   state: '空闲'
+          // }, {
+          //   id: '1',
+          //   roomID: '1',
+          //   state: '空闲'
+          // }, {
+          //   id: '2',
+          //   roomID: '1',
+          //   state: '空闲'
+          // }, {
+          //   id: '3',
+          //   roomID: '1',
+          //   state: '3号病人使用'
+          // }
+          ],
+          // staffTableData:[{
+          //   id: '0',
+          //   name: '王小虎',
+          //   gender: '男',
+          //   age: 8,
+          // }, {
+          //   id: '1',
+          //   name: '王小虎',
+          //   gender: '男',
+          //   age: 8,
+          // }, {
+          //   id: '3',
+          //   name: '王小虎',
+          //   gender: '男',
+          //   age: 8,
+          // }, {
+          //   id: '5',
+          //   name: '王小虎',
+          //   gender: '男',
+          //   age: 8,
+          // }],
+          patientTableData:[
+          //   {
+          //   id: '0',
+          //   name: '王小虎',
+          //   gender: '男',
+          //   age: 8,
+          //   treatArea: '轻症区',
+          //   nurseID: 1,
+          //   grade: '轻症',
+          //   waitTransfer:'是',
+          //   leaveHospital: '是',
+          //   lifeCondition: '出院'
+          // }, {
+          //   id: '1',
+          //   name: '王小虎',
+          //   gender: '男',
+          //   age: 8,
+          //   treatArea: '危重症区',
+          //   nurseID: 1,
+          //   grade: '重症',
+          //   waitTransfer:'是',
+          //   leaveHospital: '否',
+          //   lifeCondition: '出院'
+          // }, {
+          //   id: '2',
+          //   name: '王小虎',
+          //   gender: '男',
+          //   age: 8,
+          //   treatArea: '轻症区',
+          //   nurseID: 1,
+          //   grade: '轻症',
+          //   waitTransfer:'是',
+          //   leaveHospital: '是',
+          //   lifeCondition: '出院'
+          // }, {
+          //   id: '3',
+          //   name: '王小虎',
+          //   gender: '男',
+          //   age: 8,
+          //   treatArea: '隔离区',
+          //   nurseID: 1,
+          //   grade: '轻症',
+          //   waitTransfer:'否',
+          //   leaveHospital: '否',
+          //   lifeCondition: '治疗'
+          // }
+          ]
 
         }
       },
@@ -504,8 +508,8 @@
                 }
                 this.bedTableData.push(
                   {
-                    sickBedId: resp.data.sickBeds[i].id,
-                    sickRoomId: resp.data.sickBeds[i].roomID,
+                    id: resp.data.sickBeds[i].id,
+                    roomID: resp.data.sickBeds[i].roomID,
                     state: resp.data.sickBeds[i].state
                   }
                 )
