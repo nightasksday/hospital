@@ -43,8 +43,8 @@ export default {
       },
       loading: false,
       staff:{
-        job:2,
-        id:1
+        // job:2,
+        // id:1
       }
     }
   },
@@ -54,28 +54,28 @@ export default {
         this.$message.error('ID名不得为空');
         return;
       }
-      this.$store.commit('setCurrentUser', this.staff);
-      this.$router.replace({path: '/Home'})
-   //    this.$axios.post('/login', {
-   //      id: this.loginForm.id
-   //    })
-   //      .then(resp => {
-   //        if (resp.data.staff === null){
-   //          throw error()
-   //        }
-   //        console.log(resp);
-   //        if (resp.status === 200) {
-   //          this.$message({
-   //            message: '登陆成功',
-   //            type: 'success'
-   //          });
-   //          this.$store.commit('setCurrentUser', resp.data.staff);
-   //          this.$router.replace({path: '/Home'})
-   //        }
-   //      })
-   //      .catch(error =>
-   //        this.$message.error('ID不存在')
-   // )
+      // this.$store.commit('setCurrentUser', this.staff);
+      // this.$router.replace({path: '/Home'})
+      this.$axios.post('/login', {
+        id: this.loginForm.id
+      })
+        .then(resp => {
+          if (resp.data.staff === null){
+            throw error()
+          }
+          console.log(resp);
+          if (resp.status === 200) {
+            this.$message({
+              message: '登陆成功',
+              type: 'success'
+            });
+            this.$store.commit('setCurrentUser', resp.data.staff);
+            this.$router.replace({path: '/Home'})
+          }
+        })
+        .catch(error =>
+          this.$message.error('ID不存在')
+   )
 
 
     }
