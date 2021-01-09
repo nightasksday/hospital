@@ -409,7 +409,7 @@
         },
 
         searchPatientByRoomNurseId() {
-          this.tableDisplayed = 1;
+          this.tableDisplayed = 2;
           if (this.roomNurseIdForSearchPatient === '') {
             this.$message.error("护士id不得为空");
             return
