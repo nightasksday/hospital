@@ -547,7 +547,6 @@
         },
 
         leaveHospital(index) {
-          alert(this.patientTableData[index].id);
           this.$axios.post('/deleteSatisfiedPatient', {
             patientId: this.patientTableData[index].id,
           })
@@ -571,8 +570,5 @@
   .el-table{
     padding-top: 0;
     padding-bottom: 0;
-  }
-  .el-button{
-    padding: 0;
   }
 </style>
