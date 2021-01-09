@@ -65,6 +65,15 @@
               <el-form :model="dailyInformation" label-position="top" size=mini ref="applyForm"
                        label-width="150px" class="demo-ruleForm" style="margin:9px 0 auto;width: 330px;">
 
+                <el-form-item label="登记日期" prop="currentDate" class="form-label" style="text-align: left">
+                  <el-date-picker type="date" v-model="dailyInformation.currentDate" value-format="yyyy-MM-dd"
+                                  autocomplete="off" style="width: 330px"
+                                  :clearable="false" :editable="false"
+                                  placeholder="请输入登记日期"
+                                  prefix-icon="1"
+                  ></el-date-picker>
+                </el-form-item>
+
                 <el-form-item label="生命状态" class="form-label" style="text-align: left">
                   <el-select v-model="dailyInformation.lifeCondition" placeholder="请选择生命状态" style="width: 330px">
                     <el-option
@@ -196,9 +205,9 @@
           newLiveState: 1,
           dailyInformation: {
             temperature: '',
+            currentDate:'',
             symptom: '',
             lifeCondition: '',
-            grade: '',
           },
 
           testForm: {
@@ -248,13 +257,15 @@
         },
 
         submitDailyInformation() {
-          if (this.dailyInformation.temperature === '' ||
+          if (this.dailyInformation.currentDate === '' ||
+            this.dailyInformation.temperature === '' ||
             this.dailyInformation.symptom === '' ||
             this.dailyInformation.lifeCondition === ''){
             this.$message.error("任何一项不得为空");
             return
           }
           this.$axios.post('/submitDailyInformation', {
+            currentDate: this.dailyInformation.currentDate,
             patientId: this.patientId,
             temperature: this.dailyInformation.temperature,
             symptom: this.dailyInformation.symptom,
@@ -263,6 +274,7 @@
             .then(resp => {
               if (resp.data.status === 1) {
                 this.$message.success("提交成功");
+                this.dailyInformation.currentDate = '';
                 this.dailyInformation.temperature = '';
                 this.dailyInformation.symptom = '';
                 this.dailyInformation.lifeCondition = '';
